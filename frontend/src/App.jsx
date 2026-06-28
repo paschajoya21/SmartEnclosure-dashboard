@@ -36,18 +36,18 @@ export default function App() {
             sensorData={sensorData}
             lastUpdate={sensorData?.timestamp}
           />
-          <DetectionCard
+          <ControlPanel
             mqttStatus={mqttStatus}
-            detectionResult={detectionResult}
+            sensorData={sensorData}
             onSendCommand={sendCommand}
             onCommandSent={handleCommandSent}
           />
         </div>
 
         <div className={styles.rightCol}>
-          <ControlPanel
+          <DetectionCard
             mqttStatus={mqttStatus}
-            sensorData={sensorData}
+            detectionResult={detectionResult}
             onSendCommand={sendCommand}
             onCommandSent={handleCommandSent}
           />
