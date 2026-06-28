@@ -3,7 +3,7 @@ const { getSpeciesCondition, parseRange } = require('./speciesCatalog');
 
 const WORKFLOW_URL = process.env.ROBOFLOW_WORKFLOW_URL || 'https://serverless.roboflow.com/reptileclassification/workflows/detect-and-classify';
 const CONFIDENCE_THRESHOLD = Number(process.env.DETECTION_CONFIDENCE_THRESHOLD || 60);
-const MQTT_URL = process.env.MQTT_URL || 'wss://mqtt.eclipseprojects.io/mqtt';
+const MQTT_URL = process.env.MQTT_URL || 'wss://broker.hivemq.com:8884/mqtt';
 const MQTT_BASE_TOPIC = process.env.MQTT_BASE_TOPIC || 'smart-enclosure-reptil/device01';
 const DETECTION_TOPIC = MQTT_BASE_TOPIC + '/detection';
 

@@ -58,7 +58,7 @@ export default function App() {
       <footer className={styles.footer}>
         <span>Smart Reptile Enclosure Dashboard</span>
         <span className={styles.footerSep}>-</span>
-        <span>MQTT WebSocket: mqtt.eclipseprojects.io</span>
+        <span>MQTT WebSocket: broker.hivemq.com</span>
         <span className={styles.footerSep}>-</span>
         <span>Topic: smart-enclosure-reptil/device01</span>
       </footer>

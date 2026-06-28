@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import mqtt from 'mqtt';
 
-const MQTT_URL = process.env.REACT_APP_MQTT_URL || 'wss://mqtt.eclipseprojects.io/mqtt';
+const MQTT_URL = process.env.REACT_APP_MQTT_URL || 'wss://broker.hivemq.com:8884/mqtt';
 const BASE_TOPIC = process.env.REACT_APP_MQTT_BASE_TOPIC || 'smart-enclosure-reptil/device01';
 const MAX_LOGS = 50;
 
