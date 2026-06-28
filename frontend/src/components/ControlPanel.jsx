@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { sendCommand } from '../api/control';
 import styles from './ControlPanel.module.css';
 
 const ACTUATORS = [
@@ -44,19 +43,19 @@ function ActuatorSwitch({ actuator, status, loadingCommand, mqttReady, onToggle 
   );
 }
 
-export default function ControlPanel({ mqttStatus, sensorData, onCommandSent }) {
+export default function ControlPanel({ mqttStatus, sensorData, onSendCommand, onCommandSent }) {
   const [loadingCommand, setLoadingCommand] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const mqttReady = mqttStatus === 'connected';
 
   const handleCommand = async (command) => {
-    if (loadingCommand) return;
+    if (loadingCommand || !onSendCommand) return;
     setLoadingCommand(command);
     setFeedback(null);
 
     try {
-      const result = await sendCommand(command);
-      setFeedback({ type: 'success', message: result.message });
+      const result = await onSendCommand(command);
+      setFeedback({ type: 'success', message: result.message || 'Command sent.' });
       if (onCommandSent) onCommandSent(command);
     } catch (err) {
       const errorMsg = err.message || 'Failed to send command';

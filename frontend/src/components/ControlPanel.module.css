@@ -7,7 +7,8 @@
 }
 .cardHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
 .cardTitle { font-size: 1rem; font-weight: 600; color: var(--color-text); }
-.mqttWarning { font-size: 0.78rem; font-weight: 600; color: var(--color-warning); background: rgba(246, 201, 14, 0.12); border: 1px solid rgba(246, 201, 14, 0.4); border-radius: 999px; padding: 0.25rem 0.7rem; }
+.mqttWarning { font-size: 0.78rem; font-weight: 600; border-radius: 999px; padding: 0.25rem 0.7rem; }
+.mqttWarning { color: var(--color-warning); background: rgba(246, 201, 14, 0.12); border: 1px solid rgba(246, 201, 14, 0.4); }
 .actuatorList { display: flex; flex-direction: column; gap: 0.75rem; }
 .actuatorRow { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 72px; padding: 0.875rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface-2); transition: border-color var(--transition), box-shadow var(--transition); }
 .rowOn { border-color: rgba(78, 204, 163, 0.55); box-shadow: 0 0 0 1px rgba(78, 204, 163, 0.12); }
@@ -34,4 +35,5 @@
 .feedbackSuccess { background: rgba(78, 204, 163, 0.1); border: 1px solid rgba(78, 204, 163, 0.3); color: var(--color-on); }
 .feedbackError { background: rgba(233, 69, 96, 0.1); border: 1px solid rgba(233, 69, 96, 0.3); color: var(--color-error); }
 @keyframes spin { to { transform: rotate(360deg); } }
-@media (max-width: 420px) { .actuatorRow { align-items: flex-start; flex-direction: column; } .utilityRow { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .utilityRow { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .actuatorRow { align-items: flex-start; flex-direction: column; } }

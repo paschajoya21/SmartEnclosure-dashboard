@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { sendCommand } from '../api/control';
 import styles from './DetectionCard.module.css';
 
 function formatTime(iso) {
@@ -28,23 +27,24 @@ function formatConfidence(value) {
   return value + '%';
 }
 
-export default function DetectionCard({ mqttStatus, detectionResult, onCommandSent }) {
+export default function DetectionCard({ mqttStatus, detectionResult, onSendCommand, onCommandSent }) {
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
   const mqttReady = mqttStatus === 'connected';
   const canRun = mqttReady && !loading;
   const statusLabel = loading ? 'Sending command' : getStatusLabel(detectionResult);
-  const isFailure = detectionResult?.status === 'failed' || detectionResult?.status === 'error';
+  const isFailure = detectionResult?.status === 'failed' || detectionResult?.status === 'error' || detectionResult?.status === 'unknown';
+  const preview = detectionResult?.previewBase64 || detectionResult?.imagePreview;
 
   const handleDetect = async () => {
-    if (!canRun) return;
+    if (!canRun || !onSendCommand) return;
 
     setLoading(true);
     setFeedback(null);
 
     try {
-      const result = await sendCommand('detect_species');
+      const result = await onSendCommand('detect_species');
       setFeedback({ type: 'success', message: result.message || 'Detection command sent.' });
       if (onCommandSent) onCommandSent('detect_species');
     } catch (err) {
@@ -62,9 +62,9 @@ export default function DetectionCard({ mqttStatus, detectionResult, onCommandSe
       <div className={styles.header}>
         <div>
           <h2 className={styles.title}>Species Detection</h2>
-          <p className={styles.subtitle}>ESP32-S3 camera to backend</p>
+          <p className={styles.subtitle}>ESP32-S3 camera to Roboflow</p>
         </div>
-        <span className={`${styles.status} ${isFailure ? styles.statusError : styles.statusNormal}`}>
+        <span className={styles.status + ' ' + (isFailure ? styles.statusError : styles.statusNormal)}>
           {statusLabel}
         </span>
       </div>
@@ -85,8 +85,15 @@ export default function DetectionCard({ mqttStatus, detectionResult, onCommandSe
       )}
 
       {feedback && (
-        <div className={`${styles.feedback} ${feedback.type === 'error' ? styles.feedbackError : styles.feedbackSuccess}`}>
+        <div className={styles.feedback + ' ' + (feedback.type === 'error' ? styles.feedbackError : styles.feedbackSuccess)}>
           {feedback.message}
+        </div>
+      )}
+
+      {preview && (
+        <div className={styles.previewWrap}>
+          <span className={styles.label}>Last Captured Image</span>
+          <img className={styles.previewImage} src={preview} alt="Last captured reptile detection" />
         </div>
       )}
 

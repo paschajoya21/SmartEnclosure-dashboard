@@ -1,243 +1,114 @@
-# 🦎 Smart Reptile Enclosure Dashboard
+# Smart Reptile Enclosure Dashboard
 
-Dashboard IoT full-stack untuk memantau dan mengontrol kandang reptil secara real-time menggunakan MQTT, Socket.IO, React, dan Node.js.
+Dashboard IoT serverless untuk memantau sensor, mengontrol aktuator, dan menjalankan deteksi spesies reptil menggunakan ESP32-S3, MQTT WebSocket, Vercel Function, dan Roboflow.
 
----
+## Arsitektur Serverless
 
-## Arsitektur Sistem
-
+```text
+Frontend React di Vercel
+  <-> MQTT over WebSocket
+HiveMQ Broker
+  <-> MQTT TCP
+ESP32-S3
+  -> HTTPS POST image
+Vercel Function /api/detect
+  -> Roboflow Workflow
+  -> publish hasil deteksi + preview ke MQTT
 ```
-ESP32 ──MQTT──► HiveMQ Broker ──MQTT──► Backend (Node.js)
-                                              │
-                                          Socket.IO
-                                              │
-                                         Frontend (React)
-```
+
+Backend Express lama tidak diperlukan untuk mode deployment ini. ESP32 menjadi pusat scheduler dan auto-control, sehingga deteksi otomatis tetap berjalan walaupun dashboard web tidak sedang dibuka.
+
+## Komponen
 
 | Komponen | Teknologi |
 |----------|-----------|
 | Frontend | React 18 |
-| Backend | Node.js + Express |
-| Real-time | Socket.IO |
-| MQTT | mqtt.js → HiveMQ Public Broker |
-| MQTT Broker | broker.hivemq.com:1883 |
+| Hosting | Vercel |
+| Realtime | MQTT over WebSocket |
+| Broker | HiveMQ Public Broker |
+| Deteksi | Vercel Function + Roboflow |
+| Scheduler | ESP32-S3 + NTP |
+| Auto-control | ESP32-S3 |
 
----
+## Struktur Penting
 
-## Struktur Folder
-
-```
+```text
 WebSmartEnclosure/
-├── backend/
-│   ├── src/
-│   │   ├── index.js          # Entry point: Express + Socket.IO + MQTT init
-│   │   ├── config.js         # Konfigurasi broker, port, allowed commands
-│   │   ├── mqttClient.js     # MQTT connection, subscribe, publish
-│   │   └── routes/
-│   │       └── control.js    # POST /api/control endpoint
-│   ├── package.json
-│   └── .env.example
-│
-├── frontend/
-│   ├── public/
-│   │   └── index.html
-│   ├── src/
-│   │   ├── index.js          # React entry point
-│   │   ├── index.css         # Global styles & CSS variables
-│   │   ├── App.jsx           # Root component & layout
-│   │   ├── App.module.css
-│   │   ├── hooks/
-│   │   │   └── useSocket.js  # Socket.IO hook (sensor data, logs, status)
-│   │   ├── api/
-│   │   │   └── control.js    # HTTP API helper untuk kirim command
-│   │   └── components/
-│   │       ├── Header.jsx        # Header + status badge koneksi
-│   │       ├── SensorCard.jsx    # Card temperature, humidity, lux
-│   │       ├── ActuatorCard.jsx  # Card status relay & humidifier
-│   │       ├── ControlPanel.jsx  # Tombol kontrol aktuator
-│   │       └── LogPanel.jsx      # Panel log pesan MQTT
-│   ├── package.json
-│   └── .env.example
-│
-└── README.md
+  frontend/
+    api/
+      detect.js          # Vercel Function untuk Roboflow
+      health.js          # Health check serverless
+      speciesCatalog.js  # Daftar spesies + parameter
+    src/
+      hooks/useSocket.js # MQTT WebSocket hook
+      components/        # Dashboard UI
+    vercel.json
+  backend/               # Legacy, tidak dipakai untuk serverless production
 ```
-
----
 
 ## MQTT Topics
 
-| Arah | Topic | Deskripsi |
-|------|-------|-----------|
-| Subscribe | `smart-enclosure-reptil/device01/sensor` | Data sensor dari ESP32 |
-| Subscribe | `smart-enclosure-reptil/device01/status` | Status perangkat dari ESP32 |
-| Publish | `smart-enclosure-reptil/device01/control` | Command kontrol ke ESP32 |
+| Topic | Arah | Fungsi |
+|-------|------|--------|
+| `smart-enclosure-reptil/device01/sensor` | ESP -> Web | Data sensor dan status aktuator |
+| `smart-enclosure-reptil/device01/status` | ESP -> Web | Status perangkat |
+| `smart-enclosure-reptil/device01/control` | Web -> ESP | Command aktuator dan deteksi |
+| `smart-enclosure-reptil/device01/detection` | ESP/Function -> Web | Status dan hasil deteksi |
 
-### Format Payload Sensor (dari ESP32)
-```json
-{
-  "temperature": 28.5,
-  "humidity": 75.0,
-  "lux": 120.0,
-  "relay1": "off",
-  "relay2": "off",
-  "humidifier": "off"
-}
-```
+## Command Kontrol
 
-### Daftar Command Kontrol
 | Command | Fungsi |
 |---------|--------|
-| `relay1_on` | Hidupkan Relay 1 |
-| `relay1_off` | Matikan Relay 1 |
-| `relay2_on` | Hidupkan Relay 2 |
-| `relay2_off` | Matikan Relay 2 |
-| `humidifier_on` | Hidupkan Humidifier |
-| `humidifier_off` | Matikan Humidifier |
-| `all_off` | Matikan semua aktuator |
-| `read_sensor` | Minta ESP32 kirim data sensor |
+| `relay1_on` / `relay1_off` | Heatpad ON/OFF |
+| `relay2_on` / `relay2_off` | Lampu ON/OFF |
+| `humidifier_on` / `humidifier_off` | Humidifier ON/OFF |
+| `all_off` | Matikan semua aktuator dan reset parameter aktif |
+| `read_sensor` | Minta ESP publish data sensor |
+| `detect_species` | Jalankan deteksi manual |
 
----
+## Deteksi Otomatis
 
-## Cara Menjalankan
+Deteksi berkala berjalan di ESP32-S3 pada jam 06:00, 12:00, 18:00, dan 22:00 WIB. Sebelum mengambil gambar, ESP menyalakan lampu relay2, menunggu beberapa detik, mengambil gambar, lalu upload JPEG ke Vercel Function `/api/detect`.
 
-### Prasyarat
-- Node.js v18+ sudah terinstall
-- npm atau yarn tersedia
-- Koneksi internet untuk MQTT broker publik HiveMQ
+Jika hasil Roboflow valid dan confidence minimal 60%, ESP menyimpan parameter:
 
----
+- warm side min/max
+- humidity min/max
 
-### 1. Jalankan Backend
+ESP lalu menjalankan heatpad, lampu, dan humidifier otomatis berdasarkan data sensor. Jika spesies unknown, confidence rendah, atau deteksi error, aktuator dimatikan.
+
+## Menjalankan Frontend Lokal
 
 ```bash
-# Masuk ke folder backend
-cd backend
-
-# Install dependencies
-npm install
-
-# (Opsional) Salin file env
-copy .env.example .env
-
-# Jalankan server
-npm start
-```
-
-Server backend akan berjalan di `http://localhost:3001`
-
-Untuk development dengan auto-reload:
-```bash
-npm run dev
-```
-
----
-
-### 2. Jalankan Frontend
-
-Buka terminal baru:
-
-```bash
-# Masuk ke folder frontend
 cd frontend
-
-# Install dependencies
 npm install
-
-# (Opsional) Salin file env
-copy .env.example .env
-
-# Jalankan development server
 npm start
 ```
 
-Frontend akan terbuka otomatis di browser pada `http://localhost:3000`
+## Environment Variable Vercel
 
----
+Isi di dashboard Vercel pada project frontend:
 
-## API Endpoint
-
-### POST `/api/control`
-
-Kirim command ke ESP32 melalui MQTT.
-
-**Request Body:**
-```json
-{
-  "command": "relay1_on"
-}
+```env
+ROBOFLOW_API_KEY=your_roboflow_api_key
+ROBOFLOW_WORKFLOW_URL=https://serverless.roboflow.com/reptileclassification/workflows/detect-and-classify
+DETECTION_CONFIDENCE_THRESHOLD=60
+MQTT_URL=wss://broker.hivemq.com:8884/mqtt
+MQTT_BASE_TOPIC=smart-enclosure-reptil/device01
+REACT_APP_MQTT_URL=wss://broker.hivemq.com:8884/mqtt
+REACT_APP_MQTT_BASE_TOPIC=smart-enclosure-reptil/device01
 ```
 
-**Response Sukses (200):**
-```json
-{
-  "success": true,
-  "message": "Command \"relay1_on\" has been sent successfully.",
-  "command": "relay1_on"
-}
+## Konfigurasi ESP32
+
+Setelah frontend deploy ke Vercel, ubah domain di `programESP/programESP.ino`:
+
+```cpp
+const char* detection_host = "domain-vercel-kamu.vercel.app";
 ```
 
-**Response Error (400 - Command tidak valid):**
-```json
-{
-  "success": false,
-  "error": "Unknown command \"xyz\". Allowed commands: relay1_on, relay1_off, ..."
-}
-```
-
-**Response Error (503 - MQTT tidak terhubung):**
-```json
-{
-  "success": false,
-  "error": "MQTT broker is not connected. Please wait and try again."
-}
-```
-
-### GET `/api/health`
-```json
-{ "status": "ok", "timestamp": "2024-01-01T00:00:00.000Z" }
-```
-
----
-
-## Socket.IO Events (Backend → Frontend)
-
-| Event | Payload | Deskripsi |
-|-------|---------|-----------|
-| `sensor-data` | `{ temperature, humidity, lux, relay1, relay2, humidifier, timestamp }` | Data sensor terbaru |
-| `device-status` | `{ message, timestamp }` | Status device dari topic status |
-| `mqtt-status` | `{ status: "connected"\|"disconnected", timestamp }` | Perubahan status koneksi MQTT |
-| `log` | `{ message, timestamp }` | Log aktivitas MQTT |
-
----
-
-## Fitur Dashboard
-
-- **Sensor Card** — Menampilkan temperature (°C), humidity (%), lux (lx) secara real-time
-- **Actuator Card** — Status visual relay1, relay2, humidifier (ON/OFF dengan warna)
-- **Control Panel** — Tombol Relay 1 ON/OFF, Relay 2 ON/OFF, Humidifier ON/OFF, All OFF, Read Sensor
-- **MQTT Status** — Indikator koneksi MQTT (hijau/merah) dan Socket.IO di header
-- **Log Panel** — Riwayat 50 pesan MQTT terbaru dengan timestamp
-- **Responsive** — Tampilan optimal di desktop dan tablet
-
----
-
-## Troubleshooting
-
-**Backend tidak terhubung ke MQTT broker:**
-- Pastikan koneksi internet aktif
-- Cek apakah `broker.hivemq.com:1883` dapat diakses dari jaringan Anda
-- Periksa log console backend untuk pesan error
-
-**Frontend tidak menerima data:**
-- Pastikan backend berjalan di port 3001
-- Cek CORS jika frontend dan backend berjalan di domain berbeda
-- Verifikasi URL backend di `frontend/.env` atau `REACT_APP_BACKEND_URL`
-
-**Tombol kontrol tidak berfungsi:**
-- Pastikan indikator MQTT berwarna hijau (Connected)
-- Cek log panel untuk pesan error dari backend
-
+Jangan isi dengan `https://`; cukup hostname saja.
 
 ## Deployment
 
-Lihat [DEPLOYMENT.md](./DEPLOYMENT.md) untuk panduan GitHub, Vercel frontend, dan hosting backend.
+Lihat [DEPLOYMENT.md](./DEPLOYMENT.md).

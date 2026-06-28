@@ -15,13 +15,14 @@ export default function App() {
     logs,
     detectionResult,
     addLog,
+    sendCommand,
   } = useSocket();
 
   const handleCommandSent = (message) => {
     if (message.startsWith('[ERROR]')) {
       addLog(message);
     } else {
-      addLog(`[Control] Command sent: ${message}`);
+      addLog('[Control] Command sent: ' + message);
     }
   };
 
@@ -38,6 +39,7 @@ export default function App() {
           <DetectionCard
             mqttStatus={mqttStatus}
             detectionResult={detectionResult}
+            onSendCommand={sendCommand}
             onCommandSent={handleCommandSent}
           />
         </div>
@@ -46,6 +48,7 @@ export default function App() {
           <ControlPanel
             mqttStatus={mqttStatus}
             sensorData={sensorData}
+            onSendCommand={sendCommand}
             onCommandSent={handleCommandSent}
           />
           <LogPanel logs={logs} />
@@ -55,7 +58,7 @@ export default function App() {
       <footer className={styles.footer}>
         <span>Smart Reptile Enclosure Dashboard</span>
         <span className={styles.footerSep}>-</span>
-        <span>MQTT: broker.hivemq.com:1883</span>
+        <span>MQTT WebSocket: broker.hivemq.com</span>
         <span className={styles.footerSep}>-</span>
         <span>Topic: smart-enclosure-reptil/device01</span>
       </footer>

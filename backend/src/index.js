@@ -36,7 +36,11 @@ app.use('/uploads', express.static(require('path').join(__dirname, '../uploads')
 
 // Health check endpoint
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'ok',
+    mqttConnected: getMqttStatus(),
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Control endpoint
