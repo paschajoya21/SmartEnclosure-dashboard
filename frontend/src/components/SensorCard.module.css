@@ -1,0 +1,96 @@
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.lastUpdate {
+  font-size: 0.73rem;
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+}
+
+.sensorGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 767px) {
+  .sensorGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sensorItem {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--accent, var(--color-primary));
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.sensorItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.sensorIcon {
+  font-size: 1.75rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.sensorBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.sensorLabel {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.sensorValue {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+
+.valueNumber {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent, var(--color-primary));
+  line-height: 1;
+}
+
+.valueUnit {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}

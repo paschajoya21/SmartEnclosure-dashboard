@@ -1,0 +1,89 @@
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.logCount {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+}
+
+.logList {
+  flex: 1;
+  min-height: 60px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.empty {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  text-align: center;
+  padding: 2rem 0;
+  font-style: italic;
+}
+
+.logEntry {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  background: var(--color-surface-2);
+  border: 1px solid transparent;
+  border-left: 3px solid transparent;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.logEntry:hover {
+  border-color: var(--color-border);
+  border-left-color: var(--color-primary);
+}
+
+/* Timestamp — muted, monospace, fixed width so message aligns neatly */
+.logTime {
+  color: var(--color-text-muted);
+  font-family: 'Courier New', monospace;
+  font-size: 0.72rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  opacity: 0.75;
+}
+
+/* Message — full contrast, wraps naturally */
+.logMessage {
+  color: var(--color-text);
+  font-size: 0.8rem;
+  word-break: break-word;
+  flex: 1;
+}

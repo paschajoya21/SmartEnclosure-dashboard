@@ -1,0 +1,99 @@
+/* =============================================
+   App Shell — full-height flex column
+   ============================================= */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* =============================================
+   Main content area
+   Mobile-first: single column
+   ============================================= */
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  box-sizing: border-box;
+
+  /* Mobile: single column stacking */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Left column: sensor + actuator */
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Right column: control panel + log */
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =============================================
+   Tablet: 2 columns (min-width: 768px)
+   ============================================= */
+@media (min-width: 768px) {
+  .main {
+    grid-template-columns: 1fr 1fr;
+    padding: 24px;
+    gap: 20px;
+  }
+}
+
+/* =============================================
+   Desktop: 2 columns wider spacing (min-width: 1024px)
+   ============================================= */
+@media (min-width: 1024px) {
+  .main {
+    grid-template-columns: 1fr 1fr;
+    padding: 32px 40px;
+    gap: 28px;
+  }
+}
+
+/* =============================================
+   Mobile explicit override (max-width: 767px)
+   ============================================= */
+@media (max-width: 767px) {
+  .main {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .leftCol,
+  .rightCol {
+    gap: 16px;
+  }
+}
+
+/* =============================================
+   Footer
+   ============================================= */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 1rem 2rem;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.footerSep {
+  color: var(--color-border);
+}

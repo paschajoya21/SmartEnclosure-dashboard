@@ -1,0 +1,89 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-top: 0.1rem;
+}
+
+.statusGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 0.35rem 0.75rem;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotGreen {
+  background: var(--color-on);
+  box-shadow: 0 0 6px var(--color-on);
+}
+
+.dotRed {
+  background: var(--color-error);
+  box-shadow: 0 0 6px var(--color-error);
+}
+
+.dotYellow {
+  background: var(--color-warning);
+  box-shadow: 0 0 6px var(--color-warning);
+}
+
+.statusLabel {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 1rem;
+  }
+  .title {
+    font-size: 1.1rem;
+  }
+}

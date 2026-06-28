@@ -1,0 +1,100 @@
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.cardHeader {
+  margin-bottom: 1.25rem;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.actuatorList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.actuatorItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.875rem 1rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.actuatorItem.isOn {
+  border-color: var(--color-on);
+  box-shadow: 0 0 0 1px rgba(78, 204, 163, 0.15);
+}
+
+.actuatorLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.actuatorIcon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.actuatorLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.actuatorDesc {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  margin-top: 0.1rem;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: 20px;
+  padding: 0.3rem 0.7rem;
+}
+
+.badgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+.badgeOn {
+  color: var(--color-on);
+  background: rgba(78, 204, 163, 0.12);
+  border: 1px solid rgba(78, 204, 163, 0.3);
+}
+
+.badgeOff {
+  color: var(--color-text-muted);
+  background: rgba(85, 85, 119, 0.12);
+  border: 1px solid var(--color-off);
+  opacity: 0.8;
+}
+
+.badgeUnknown {
+  color: var(--color-text-muted);
+  background: rgba(136, 146, 164, 0.1);
+  border: 1px solid rgba(136, 146, 164, 0.3);
+}

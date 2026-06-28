@@ -1,0 +1,56 @@
+/* Global reset & base styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #07070f;
+  --color-surface: #1a1a2e;
+  --color-surface-2: #16213e;
+  --color-surface-3: #0d0d1f;
+  --color-primary: #4ecca3;
+  --color-primary-dark: #38b28c;
+  --color-accent: #e94560;
+  --color-accent-dark: #c73652;
+  --color-text: #e0e0e0;
+  --color-text-muted: #8892a4;
+  --color-border: #2a2a4a;
+  --color-on: #4ecca3;
+  --color-off: #555577;
+  --color-warning: #f6c90e;
+  --color-error: #e94560;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --transition: 0.2s ease;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface-3);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}

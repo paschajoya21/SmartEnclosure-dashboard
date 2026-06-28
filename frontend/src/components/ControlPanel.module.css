@@ -1,0 +1,37 @@
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.cardHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+.cardTitle { font-size: 1rem; font-weight: 600; color: var(--color-text); }
+.mqttWarning { font-size: 0.78rem; font-weight: 600; color: var(--color-warning); background: rgba(246, 201, 14, 0.12); border: 1px solid rgba(246, 201, 14, 0.4); border-radius: 999px; padding: 0.25rem 0.7rem; }
+.actuatorList { display: flex; flex-direction: column; gap: 0.75rem; }
+.actuatorRow { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 72px; padding: 0.875rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface-2); transition: border-color var(--transition), box-shadow var(--transition); }
+.rowOn { border-color: rgba(78, 204, 163, 0.55); box-shadow: 0 0 0 1px rgba(78, 204, 163, 0.12); }
+.actuatorInfo { min-width: 0; display: flex; align-items: center; gap: 0.75rem; }
+.statusDot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.dotOn { background: var(--color-on); }
+.dotOff { background: var(--color-off); }
+.dotUnknown { background: var(--color-text-muted); }
+.actuatorLabel { font-size: 0.9rem; font-weight: 700; color: var(--color-text); }
+.actuatorDesc { margin-top: 0.1rem; font-size: 0.72rem; color: var(--color-text-muted); }
+.switch { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 0.65rem; border: 0; background: transparent; color: var(--color-text-muted); cursor: pointer; font-weight: 700; }
+.switch:disabled { cursor: not-allowed; opacity: 0.5; }
+.switchTrack { position: relative; width: 52px; height: 30px; border-radius: 999px; background: rgba(85, 85, 119, 0.6); border: 1px solid rgba(136, 146, 164, 0.28); transition: background var(--transition), border-color var(--transition); }
+.switchThumb { position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--color-text-muted); transition: left var(--transition), background var(--transition); }
+.switchOn .switchTrack { background: rgba(78, 204, 163, 0.26); border-color: rgba(78, 204, 163, 0.5); }
+.switchOn .switchThumb { left: 25px; background: var(--color-on); }
+.switchText { min-width: 32px; text-align: left; font-size: 0.75rem; }
+.spinner { width: 12px; height: 12px; border: 2px solid var(--color-surface); border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; }
+.utilityRow { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem; }
+.utilityButton { min-height: 40px; border: 1px solid rgba(78, 204, 163, 0.25); border-radius: var(--radius-sm); background: rgba(78, 204, 163, 0.12); color: var(--color-primary); font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+.dangerButton { border-color: rgba(233, 69, 96, 0.35); background: rgba(233, 69, 96, 0.14); color: var(--color-error); }
+.utilityButton:disabled { opacity: 0.45; cursor: not-allowed; }
+.feedback { margin-top: 0.875rem; padding: 0.6rem 0.875rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600; }
+.feedbackSuccess { background: rgba(78, 204, 163, 0.1); border: 1px solid rgba(78, 204, 163, 0.3); color: var(--color-on); }
+.feedbackError { background: rgba(233, 69, 96, 0.1); border: 1px solid rgba(233, 69, 96, 0.3); color: var(--color-error); }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 420px) { .actuatorRow { align-items: flex-start; flex-direction: column; } .utilityRow { grid-template-columns: 1fr; } }
