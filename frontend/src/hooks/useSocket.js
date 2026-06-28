@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import mqtt from 'mqtt';
 
-const MQTT_URL = process.env.REACT_APP_MQTT_URL || 'wss://broker.hivemq.com:8884/mqtt';
+const MQTT_URL = process.env.REACT_APP_MQTT_URL || 'wss://mqtt.eclipseprojects.io/mqtt';
 const BASE_TOPIC = process.env.REACT_APP_MQTT_BASE_TOPIC || 'smart-enclosure-reptil/device01';
 const MAX_LOGS = 50;
 
@@ -67,6 +67,7 @@ export function useSocket() {
     });
 
     mqttRef.current = client;
+    addLog('Connecting MQTT WebSocket: ' + MQTT_URL);
 
     client.on('connect', () => {
       setMqttStatus('connected');
@@ -123,7 +124,13 @@ export function useSocket() {
 
       if (topic === TOPICS.detection) {
         if (data) {
-          setDetectionResult({ ...data, timestamp: data.timestamp || new Date().toISOString() });
+          setDetectionResult((prev) => ({
+            ...(prev || {}),
+            ...data,
+            previewBase64: data.previewBase64 || data.imagePreview || prev?.previewBase64 || null,
+            imagePreview: data.imagePreview || data.previewBase64 || prev?.imagePreview || null,
+            timestamp: data.timestamp || new Date().toISOString(),
+          }));
           addLog('[Detection] ' + (data.message || data.status || 'updated'), data.timestamp);
         } else {
           addLog('[Detection] ' + payload);

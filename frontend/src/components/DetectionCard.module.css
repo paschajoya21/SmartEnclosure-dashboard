@@ -221,3 +221,16 @@
   object-fit: contain;
   background: #05070d;
 }
+
+.previewEmpty {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  border: 1px dashed rgba(136, 146, 164, 0.28);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  background: rgba(5, 7, 13, 0.35);
+}

@@ -7,7 +7,7 @@ Dashboard IoT serverless untuk memantau sensor, mengontrol aktuator, dan menjala
 ```text
 Frontend React di Vercel
   <-> MQTT over WebSocket
-HiveMQ Broker
+Eclipse MQTT Broker
   <-> MQTT TCP
 ESP32-S3
   -> HTTPS POST image
@@ -25,7 +25,7 @@ Backend Express lama tidak diperlukan untuk mode deployment ini. ESP32 menjadi p
 | Frontend | React 18 |
 | Hosting | Vercel |
 | Realtime | MQTT over WebSocket |
-| Broker | HiveMQ Public Broker |
+| Broker | Eclipse Public MQTT Broker |
 | Deteksi | Vercel Function + Roboflow |
 | Scheduler | ESP32-S3 + NTP |
 | Auto-control | ESP32-S3 |
@@ -93,9 +93,9 @@ Isi di dashboard Vercel pada project frontend:
 ROBOFLOW_API_KEY=your_roboflow_api_key
 ROBOFLOW_WORKFLOW_URL=https://serverless.roboflow.com/reptileclassification/workflows/detect-and-classify
 DETECTION_CONFIDENCE_THRESHOLD=60
-MQTT_URL=wss://broker.hivemq.com:8884/mqtt
+MQTT_URL=wss://mqtt.eclipseprojects.io/mqtt
 MQTT_BASE_TOPIC=smart-enclosure-reptil/device01
-REACT_APP_MQTT_URL=wss://broker.hivemq.com:8884/mqtt
+REACT_APP_MQTT_URL=wss://mqtt.eclipseprojects.io/mqtt
 REACT_APP_MQTT_BASE_TOPIC=smart-enclosure-reptil/device01
 ```
 
