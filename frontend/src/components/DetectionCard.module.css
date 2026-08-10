@@ -220,6 +220,7 @@
   aspect-ratio: 4 / 3;
   object-fit: contain;
   background: #05070d;
+  transform: rotate(90deg);
 }
 
 .previewEmpty {
