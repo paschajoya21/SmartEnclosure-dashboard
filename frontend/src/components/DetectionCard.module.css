@@ -212,6 +212,7 @@
 }
 
 .previewImage {
+  transform: rotate(90deg);
   display: block;
   width: 100%;
   margin-top: 0.5rem;
@@ -220,7 +221,6 @@
   aspect-ratio: 4 / 3;
   object-fit: contain;
   background: #05070d;
-  transform: rotate(90deg);
 }
 
 .previewEmpty {
