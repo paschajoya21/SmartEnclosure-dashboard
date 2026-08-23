@@ -19,20 +19,6 @@ function loadAndLogServiceAccount() {
     throw new Error('FIREBASE_SERVICE_ACCOUNT_BASE64 tidak menghasilkan JSON valid setelah di-decode: ' + err.message);
   }
 
-  const pk = serviceAccount.private_key;
-  const newlineCount = typeof pk === 'string' ? (pk.match(/\n/g) || []).length : 0;
-
-  // Logging ini SENGAJA jalan di setiap invocation (bukan cuma sekali saat cold start)
-  // supaya kita tidak kehilangan info gara-gara warm container.
-  console.log('[fcm] raw base64 length:', raw.length);
-  console.log('[fcm] project_id:', serviceAccount.project_id || '(kosong)');
-  console.log('[fcm] client_email:', serviceAccount.client_email || '(kosong)');
-  console.log('[fcm] private_key type:', typeof pk);
-  console.log('[fcm] private_key length:', pk ? pk.length : 'undefined');
-  console.log('[fcm] private_key starts correct:', typeof pk === 'string' && pk.startsWith('-----BEGIN PRIVATE KEY-----'));
-  console.log('[fcm] private_key ends correct:', typeof pk === 'string' && pk.trim().endsWith('-----END PRIVATE KEY-----'));
-  console.log('[fcm] private_key newline count (harus ~25-28, kalau 0 itu penyebabnya):', newlineCount);
-
   const requiredFields = ['project_id', 'private_key', 'client_email'];
   const missing = requiredFields.filter((field) => !serviceAccount[field]);
   if (missing.length > 0) {
@@ -43,8 +29,6 @@ function loadAndLogServiceAccount() {
 }
 
 function getMessaging() {
-  // loadAndLogServiceAccount() dipanggil setiap kali (murah, cuma decode+parse, tidak ada network call)
-  // supaya diagnostic log selalu muncul. admin.initializeApp tetap cuma dipanggil sekali.
   const serviceAccount = loadAndLogServiceAccount();
 
   if (!admin.apps.length) {
@@ -62,7 +46,10 @@ async function sendFcmNotification(title, body, severity) {
     });
     return true;
   } catch (err) {
-    console.error('FCM send error:', err.message || err);
+    // Log stack trace lengkap, bukan cuma message, supaya kelihatan persis
+    // baris mana di dalam node_modules yang crash.
+    console.error('FCM send error:', err && err.stack ? err.stack : err);
+    console.error('[fcm] firebase-admin version:', require('firebase-admin/package.json').version);
     return false;
   }
 }
