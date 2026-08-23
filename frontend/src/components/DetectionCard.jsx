@@ -93,7 +93,9 @@ export default function DetectionCard({ mqttStatus, detectionResult, onSendComma
       <div className={styles.previewWrap}>
         <span className={styles.label}>Last Captured Image</span>
         {preview ? (
-          <img className={styles.previewImage} src={preview} alt="Last captured reptile detection" />
+          <div className={styles.previewFrame}>
+            <img className={styles.previewImage} src={preview} alt="Last captured reptile detection" />
+          </div>
         ) : (
           <div className={styles.previewEmpty}>Waiting for captured image</div>
         )}

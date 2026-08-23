@@ -1,5 +1,6 @@
 const mqtt = require('mqtt');
 const { getSpeciesCondition, parseRange } = require('./speciesCatalog');
+const { sendFcmNotification } = require('./lib/fcm');
 
 const WORKFLOW_URL = process.env.ROBOFLOW_WORKFLOW_URL || 'https://serverless.roboflow.com/reptileclassification/workflows/detect-and-classify';
 const CONFIDENCE_THRESHOLD = Number(process.env.DETECTION_CONFIDENCE_THRESHOLD || 60);
@@ -146,6 +147,7 @@ function buildDetectionResult(imageBuffer, roboflowResult) {
     humidityMin: humidityRange?.min ?? null,
     humidityMax: humidityRange?.max ?? null,
     message: 'Species classified successfully',
+    notification: 'Spesies terdeteksi: ' + catalog.species + ' (' + confidence + '% confidence).',
     previewBase64,
     timestamp,
   };
@@ -186,6 +188,12 @@ function publishDetection(result) {
   });
 }
 
+function notificationTitleFor(status) {
+  if (status === 'classified') return 'Deteksi Berhasil';
+  if (status === 'error') return 'Deteksi Gagal';
+  return 'Spesies Tidak Dikenali';
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -214,6 +222,14 @@ module.exports = async function handler(req, res) {
 
     await publishDetection(detectionResult);
 
+    // Kirim notifikasi FCM. Tidak melempar error kalau gagal (sudah ditangani
+    // di dalam sendFcmNotification), jadi tidak akan menggagalkan response ke ESP32.
+    await sendFcmNotification(
+      notificationTitleFor(detectionResult.status),
+      detectionResult.notification,
+      detectionResult.status === 'classified' ? 'info' : 'warning'
+    );
+
     res.status(200).json(compactForEsp(detectionResult));
   } catch (err) {
     const errorResult = {
@@ -227,6 +243,13 @@ module.exports = async function handler(req, res) {
     };
 
     await publishDetection(errorResult);
+
+    await sendFcmNotification(
+      notificationTitleFor('error'),
+      errorResult.notification,
+      'warning'
+    );
+
     res.status(200).json(errorResult);
   }
 };

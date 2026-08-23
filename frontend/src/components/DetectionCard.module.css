@@ -211,15 +211,26 @@
   background: var(--color-surface-2);
 }
 
-.previewImage {
-  display: block;
-  width: 100%;
+.previewFrame {
   margin-top: 0.5rem;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;              /* WAJIB: ini yang tadi hilang, penyebab gambar bocor */
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
-  aspect-ratio: 4 / 3;
-  object-fit: contain;
   background: #05070d;
+  position: relative;
+}
+
+.previewImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 133.33%;                /* swap width/height karena rotate 90deg */
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%) rotate(90deg);
+  transform-origin: center center;
 }
 
 .previewEmpty {

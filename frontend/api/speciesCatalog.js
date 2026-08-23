@@ -15,7 +15,7 @@ const SPECIES_CONDITIONS = [
   { species: 'Eastern Hognose Snake', scientificName: 'Heterodon platirhinos', warmSide: '31-32 C', coolSide: '21-24 C', humidity: '30-50%' },
   { species: 'Irian Jaya Blue Tongue Skink', scientificName: 'Tiliqua sp.', warmSide: '35-40 C', coolSide: '24-29 C', humidity: '60-80%' },
   { species: 'Milksnake', scientificName: 'Lampropeltis triangulum', warmSide: '29-31 C', coolSide: '21-24 C', humidity: '40-60%' },
-  { species: 'African Fat-Tailed Gecko', scientificName: 'Hemitheconyx caudicinctus', warmSide: '31-33 C', coolSide: '24-26 C', humidity: '50-70%' },
+  { species: 'African Fat-Tail Gecko', scientificName: 'Hemitheconyx caudicinctus', warmSide: '31-33 C', coolSide: '24-26 C', humidity: '50-70%' },
 ];
 
 function normalizeName(value) {

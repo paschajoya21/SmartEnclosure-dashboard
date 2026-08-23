@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSocket } from './hooks/useSocket';
+import useNotifications from './hooks/useNotifications';
 import Header from './components/Header';
 import SensorCard from './components/SensorCard';
 import ControlPanel from './components/ControlPanel';
@@ -8,6 +9,8 @@ import LogPanel from './components/LogPanel';
 import styles from './App.module.css';
 
 export default function App() {
+  useNotifications();
+
   const {
     sensorData,
     mqttStatus,
