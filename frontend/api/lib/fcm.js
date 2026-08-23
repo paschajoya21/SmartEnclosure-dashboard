@@ -30,3 +30,5 @@ async function sendFcmNotification(title, body, severity) {
 }
 
 module.exports = { sendFcmNotification, getMessaging, TOPIC };
+
+
