@@ -5,6 +5,7 @@ const SENSOR_CONFIG = {
   temperature: { label: 'Temperature', unit: '°C', icon: '🌡️', color: '#ff7c43' },
   humidity: { label: 'Humidity', unit: '%', icon: '💧', color: '#4ecca3' },
   lux: { label: 'Light Intensity', unit: 'lx', icon: '☀️', color: '#f6c90e' },
+  waterLevel: { label: 'Water Level', unit: '%', icon: '🌊', color: '#3d9be9' },
 };
 
 function SingleSensor({ type, value }) {
@@ -38,7 +39,7 @@ export default function SensorCard({ sensorData, lastUpdate }) {
       </div>
 
       <div className={styles.sensorGrid}>
-        {['temperature', 'humidity', 'lux'].map((type) => (
+        {['temperature', 'humidity', 'lux', 'waterLevel'].map((type) => (
           <SingleSensor
             key={type}
             type={type}
