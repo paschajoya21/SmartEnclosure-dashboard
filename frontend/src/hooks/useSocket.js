@@ -125,7 +125,6 @@ export function useSocket() {
       if (topic === TOPICS.detection) {
         if (data) {
           setDetectionResult((prev) => ({
-            ...(prev || {}),
             ...data,
             previewBase64: data.previewBase64 || data.imagePreview || prev?.previewBase64 || null,
             imagePreview: data.imagePreview || data.previewBase64 || prev?.imagePreview || null,
