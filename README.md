@@ -85,30 +85,6 @@ npm install
 npm start
 ```
 
-## Environment Variable Vercel
-
-Isi di dashboard Vercel pada project frontend:
-
-```env
-ROBOFLOW_API_KEY=your_roboflow_api_key
-ROBOFLOW_WORKFLOW_URL=https://serverless.roboflow.com/reptileclassification/workflows/detect-and-classify
-DETECTION_CONFIDENCE_THRESHOLD=60
-MQTT_URL=wss://broker.hivemq.com:8884/mqtt
-MQTT_BASE_TOPIC=smart-enclosure-reptil/device01
-REACT_APP_MQTT_URL=wss://broker.hivemq.com:8884/mqtt
-REACT_APP_MQTT_BASE_TOPIC=smart-enclosure-reptil/device01
-```
-
-## Konfigurasi ESP32
-
-Setelah frontend deploy ke Vercel, ubah domain di `programESP/programESP.ino`:
-
-```cpp
-const char* detection_host = "domain-vercel-kamu.vercel.app";
-```
-
-Jangan isi dengan `https://`; cukup hostname saja.
-
 ## Deployment
 
 Lihat [DEPLOYMENT.md](./DEPLOYMENT.md).
